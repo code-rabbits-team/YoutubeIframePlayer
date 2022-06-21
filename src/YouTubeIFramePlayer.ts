@@ -1,5 +1,3 @@
-import EventEmitter from "events";
-
 interface IPlayerState {
   ENDED: 0
   PLAYING: 1,
@@ -413,7 +411,41 @@ interface IYT {
 
 declare const YT: Readonly<IYT> | undefined;
 
-const eventEmiiter = new EventEmitter();
+type HandlerPayloadType = { callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean }
+
+class EventTargetEmitter extends EventTarget {
+  _actionDict: { [type: string]: Array<HandlerPayloadType> } = {}
+
+  emit(type: string) {
+    this.dispatchEvent(new Event(type));
+  }
+
+  addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean) {
+    let payload: HandlerPayloadType = { callback: callback }
+    if (options !== undefined) {
+      payload.options = options;
+    }
+
+    if (!this._actionDict[type]) {
+      this._actionDict[type] = []
+    }
+
+    this._actionDict[type].push(payload)
+    super.addEventListener(type, callback, options);
+  }
+
+  removeAllListeners(type: string) {
+    this._actionDict[type]?.map(item => {
+      if (item.options) {
+        this.removeEventListener(type, item.callback, item.options);
+      } else {
+        this.removeEventListener(type, item.callback);
+      }
+    })
+  }
+}
+
+const eventEmiiter = new EventTargetEmitter();
 let youTubeIframeAPIRead = false;
 
 // The function named onYouTubeIframeAPIReady is used in yt player
@@ -439,12 +471,12 @@ export function addLazyLoad(action: () => void) {
   if (youTubeIframeAPIRead) {
     action();
   } else {
-    eventEmiiter.addListener('ready', action);
+    eventEmiiter.addEventListener('ready', action);
   }
 }
 
 export function removeLazyLoad(action: () => void) {
-  eventEmiiter.removeListener('ready', action);
+  eventEmiiter.removeEventListener('ready', action);
 }
 
 export type { IYTPlayer };
