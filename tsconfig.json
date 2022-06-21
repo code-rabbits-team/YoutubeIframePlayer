@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "noEmitOnError": true,
+        "removeComments": false,
+        "sourceMap": false,
+        "target": "es2018",
+        "lib": [
+            "es2019",
+            "DOM"
+        ],
+        "module": "commonjs",
+        "strict": true,
+        "outDir": "dist",
+        "declaration": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true
+    }
+}

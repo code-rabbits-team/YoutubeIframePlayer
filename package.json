@@ -1,0 +1,20 @@
+{
+    "name": "@code-rabbits/youtube-iframe-player",
+    "version": "0.1.0",
+    "description": "youtube iframe player api",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/code-rabbits-team/YoutubeIframePlayer.git"
+    },
+    "devDependencies": {
+        "@types/node": "^18.0.0",
+        "typescript": "^4.5.4"
+    }
+}
